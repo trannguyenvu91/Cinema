@@ -12,11 +12,15 @@ struct MDMovieModel: MDModelProtocol {
     let title: String?
     let popularity: Double?
     let posterPath: String?
+    let overview: String?
+    let id: Int!
     
     init(with json: JSON) {
         title = json["original_title"] as? String
         popularity = json["popularity"] as? Double
         posterPath = json["poster_path"] as? String
+        overview = json["overview"] as? String
+        id = json["id"] as! Int
     }
     
 }

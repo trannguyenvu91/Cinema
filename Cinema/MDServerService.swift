@@ -27,8 +27,19 @@ class MDServerService: NSObject {
     
     typealias GetMoviesResult = Result<JSON, GetMoviesFailureReason>
     typealias GetMoviesCompletion = (GetMoviesResult) -> Void
+    
     func getMovies(at pageIndex: Int, completion: @escaping GetMoviesCompletion) {
-        Alamofire.request("\(MDConstant.serverBaseURL)/discover/movie?api_key=\(MDConstant.serverAPIKey)&sort_by=release_date.desc&page=\(pageIndex)")
+        let moviesPath = "\(MDConstant.serverBaseURL)/discover/movie?api_key=\(MDConstant.serverAPIKey)&sort_by=release_date.desc&page=\(pageIndex)"
+        return requestAPI(path: moviesPath, completion: completion)
+    }
+    
+    func getMovieDetail(at movieID: Int, completion: @escaping GetMoviesCompletion) {
+        let detailPath = "\(MDConstant.serverBaseURL)/movie/\(movieID)?api_key=\(MDConstant.serverAPIKey)"
+        return requestAPI(path: detailPath, completion: completion)
+    }
+    
+    func requestAPI(path: String, completion: @escaping GetMoviesCompletion) {
+        Alamofire.request(path)
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -48,4 +59,5 @@ class MDServerService: NSObject {
                 }
         }
     }
+    
 }

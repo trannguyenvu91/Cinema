@@ -18,7 +18,18 @@ class MDMovieViewModel: NSObject {
     }
     
     func getMovieInfo() {
-        updateCompletion()
+        guard let movieID = movie?.id else {
+            return;
+        }
+        MDServerService.share.getMovieDetail(at: movieID) { [weak self] (result) in
+            switch result {
+            case .success(let response):
+                self?.movie = MDMovieModel(with: response)
+                self?.updateCompletion()
+            case .failure(let error):
+                print(error.debugDescription)
+            }
+        }
     }
     
 }

@@ -15,7 +15,6 @@ fileprivate struct MDListMovieUIConstant {
     let screenWidth = Double(UIScreen.main.bounds.size.width)
     let loadMoreBottomThresshold: CGFloat = 100.0
     let movieSegueID = "MDMovieViewController"
-    
 }
 
 class MDListMovieViewController: UIViewController {
