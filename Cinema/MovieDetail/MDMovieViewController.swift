@@ -23,9 +23,10 @@ class MDMovieViewController: UIViewController {
     }
     
     func updateUI() {
-        labelTitle.text = viewModel.movie?.title
-        imageView.sd_setImage(with: viewModel.movie?.getPosterThumbURL(), completed: nil)
-        labelOverview.text = viewModel.movie?.overview
+        movie = viewModel.movie
+        labelTitle.text = movie?.title
+        imageView.sd_setImage(with: movie?.getPosterThumbURL(), completed: nil)
+        labelOverview.text = movie?.overview
     }
 
     override func didReceiveMemoryWarning() {

@@ -9,6 +9,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -82,7 +83,10 @@
                                             <outlet property="imageView" destination="cA4-jf-GFJ" id="E3e-a5-0LF"/>
                                             <outlet property="labelPopularity" destination="vqC-yS-uPf" id="nYZ-lv-Fha"/>
                                             <outlet property="labelTitle" destination="oVi-E0-oIO" id="bWD-Vt-opc"/>
-                                            <segue destination="Arg-FQ-xZW" kind="show" identifier="MDMovieViewController" id="tdt-rQ-OEl"/>
+                                            <segue destination="Arg-FQ-xZW" kind="show" identifier="MDMovieViewController" id="tdt-rQ-OEl">
+                                                <segue key="commit" inheritsFrom="parent" id="Cnk-1L-RpJ"/>
+                                                <segue key="preview" inheritsFrom="commit" id="6QL-fe-goA"/>
+                                            </segue>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -178,9 +182,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="z0N-Ai-OMF"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Detail" id="OYC-Va-yv3">
-                        <barButtonItem key="rightBarButtonItem" title="Book" style="done" id="apB-h5-F1a"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Detail" id="OYC-Va-yv3"/>
                     <connections>
                         <outlet property="imageView" destination="Ip6-JV-c2N" id="E44-Qv-CPX"/>
                         <outlet property="labelOverview" destination="1fM-9Z-bnF" id="48O-U3-G5O"/>
@@ -194,18 +196,33 @@
         <!--Booking-->
         <scene sceneID="JCj-Ns-mys">
             <objects>
-                <viewController id="cDD-bt-9zi" sceneMemberID="viewController">
+                <viewController id="cDD-bt-9zi" customClass="MDBookingViewController" customModule="Cinema" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qHW-dO-x2i">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KC9-yW-JFL">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="KC9-yW-JFL" firstAttribute="top" secondItem="qHW-dO-x2i" secondAttribute="top" id="Rl4-RI-KM9"/>
+                            <constraint firstItem="KC9-yW-JFL" firstAttribute="trailing" secondItem="FEu-x3-eWd" secondAttribute="trailing" id="Snv-dh-TRF"/>
+                            <constraint firstItem="KC9-yW-JFL" firstAttribute="bottom" secondItem="FEu-x3-eWd" secondAttribute="bottom" id="v4M-IB-Wil"/>
+                            <constraint firstItem="KC9-yW-JFL" firstAttribute="leading" secondItem="FEu-x3-eWd" secondAttribute="leading" id="zvB-qI-WAU"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="FEu-x3-eWd"/>
                     </view>
                     <navigationItem key="navigationItem" title="Booking" id="ySa-Dz-JIJ"/>
+                    <connections>
+                        <outlet property="webView" destination="KC9-yW-JFL" id="gZb-sa-NCm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AtA-zl-Aun" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2265" y="118"/>
+            <point key="canvasLocation" x="2264.8000000000002" y="117.39130434782609"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VxN-fh-2Lh">
@@ -229,4 +246,7 @@
     <resources>
         <image name="gradient-background" width="200" height="200"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="tdt-rQ-OEl"/>
+    </inferredMetricsTieBreakers>
 </document>

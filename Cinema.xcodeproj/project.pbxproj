@@ -23,6 +23,7 @@
 		12865CAD1F73DAE50058F42A /* MDConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12865C9D1F7366BB0058F42A /* MDConstant.swift */; };
 		12865CB21F73F8630058F42A /* MDMovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12865CB11F73F8630058F42A /* MDMovieViewModel.swift */; };
 		12865CB41F73F8760058F42A /* MDMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12865CB31F73F8760058F42A /* MDMovieViewController.swift */; };
+		12C3844B1F7415B9008A1B1C /* MDBookingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C3844A1F7415B9008A1B1C /* MDBookingViewController.swift */; };
 		1C921B5A5A80E2391F272996 /* Pods_Cinema.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C53F2646B0419D3D921A8B96 /* Pods_Cinema.framework */; };
 		C7FE1B665D9B8ABED98433F9 /* Pods_CinemaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35FD261B9C746A136646147 /* Pods_CinemaTests.framework */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 		12865CAB1F73D43C0058F42A /* MDServerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDServerService.swift; sourceTree = "<group>"; };
 		12865CB11F73F8630058F42A /* MDMovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDMovieViewModel.swift; sourceTree = "<group>"; };
 		12865CB31F73F8760058F42A /* MDMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDMovieViewController.swift; sourceTree = "<group>"; };
+		12C3844A1F7415B9008A1B1C /* MDBookingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDBookingViewController.swift; sourceTree = "<group>"; };
 		505DB9C39F19FCD6C101F485 /* Pods-Cinema.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cinema.release.xcconfig"; path = "Pods/Target Support Files/Pods-Cinema/Pods-Cinema.release.xcconfig"; sourceTree = "<group>"; };
 		8FDF01A31E04FFC9985B13F8 /* Pods-CinemaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CinemaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CinemaTests/Pods-CinemaTests.release.xcconfig"; sourceTree = "<group>"; };
 		C35FD261B9C746A136646147 /* Pods_CinemaTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CinemaTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +115,7 @@
 				12865C7E1F7359660058F42A /* Main.storyboard */,
 				12865CAA1F73CBB90058F42A /* MovieList */,
 				12865CB01F73F8470058F42A /* MovieDetail */,
+				12C3844C1F7415C4008A1B1C /* Booking */,
 				12865C811F7359660058F42A /* Assets.xcassets */,
 				12865CAB1F73D43C0058F42A /* MDServerService.swift */,
 				12865C831F7359660058F42A /* LaunchScreen.storyboard */,
@@ -161,6 +164,14 @@
 				12865CB11F73F8630058F42A /* MDMovieViewModel.swift */,
 			);
 			path = MovieDetail;
+			sourceTree = "<group>";
+		};
+		12C3844C1F7415C4008A1B1C /* Booking */ = {
+			isa = PBXGroup;
+			children = (
+				12C3844A1F7415B9008A1B1C /* MDBookingViewController.swift */,
+			);
+			path = Booking;
 			sourceTree = "<group>";
 		};
 		2661041494A318F25638BAF3 /* Frameworks */ = {
@@ -396,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12C3844B1F7415B9008A1B1C /* MDBookingViewController.swift in Sources */,
 				12865CA51F737D5C0058F42A /* MDListMovieViewModel.swift in Sources */,
 				12865C7D1F7359660058F42A /* MDListMovieViewController.swift in Sources */,
 				12865C7B1F7359660058F42A /* AppDelegate.swift in Sources */,
