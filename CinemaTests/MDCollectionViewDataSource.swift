@@ -9,7 +9,7 @@
 import XCTest
 @testable import Cinema
 
-class CinemaTests: XCTestCase {
+class MDCollectionViewDataSource: XCTestCase {
     
     override func setUp() {
         super.setUp()

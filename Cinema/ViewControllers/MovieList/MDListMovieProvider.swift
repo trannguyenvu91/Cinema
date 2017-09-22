@@ -24,6 +24,7 @@ class MDListMovieProvider: NSObject, MDListProviderProtocol {
     var state = MDProviderState.initial
     var movies = [MDMovieModel]()
     var currentPageIndex = 1
+    var totalPage = Int.max
     
     func model(at indexPath: IndexPath) -> MDModelProtocol? {
         return movies[indexPath.row]
@@ -46,6 +47,7 @@ extension MDListMovieProvider {
         currentPageIndex = 1
         getMovies(at: currentPageIndex) {[weak self] (pageIndex, pageCount, nextMovies) in
             self?.currentPageIndex = pageIndex
+            self?.totalPage = pageCount
             self?.movies.removeAll()
             self?.movies.append(contentsOf: nextMovies)
             self?.reloadNotification?()
@@ -54,12 +56,13 @@ extension MDListMovieProvider {
     }
     
     func loadMore() {
-        guard state != .loading else {
+        guard couldLoadMore else {
             return
         }
         state = .loading
         getMovies(at: currentPageIndex + 1) {[weak self] (pageIndex, pageCount, nextMovies) in
             self?.currentPageIndex = pageIndex
+            self?.totalPage = pageCount
             self?.movies.append(contentsOf: nextMovies)
             var insertIndexPaths = [IndexPath]()
             for i in ((self?.movies.count)! - nextMovies.count)...((self?.movies.count)! - 1) {
@@ -88,6 +91,10 @@ extension MDListMovieProvider {
                 self?.didFinishLoading?()
             }
         }
+    }
+    
+    var couldLoadMore: Bool {
+        return state != .loading && currentPageIndex < totalPage
     }
     
 }

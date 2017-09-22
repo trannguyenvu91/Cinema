@@ -11,9 +11,11 @@ import UIKit
 class MDBookingViewController: UIViewController {
 
     @IBOutlet weak var webView: UIWebView!
+    let bookingURL = URL(string: "http://www.cathaycineplexes.com.sg")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView.loadRequest(URLRequest(url: URL(string: "http://www.cathaycineplexes.com.sg")!))
+        webView.loadRequest(URLRequest(url: bookingURL!))
     }
 
     override func didReceiveMemoryWarning() {
