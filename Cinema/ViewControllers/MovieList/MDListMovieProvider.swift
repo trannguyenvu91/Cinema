@@ -17,7 +17,6 @@ enum MDProviderState {
 }
 
 class MDListMovieProvider: NSObject, MDListProviderProtocol {
-    
     var reloadNotification: (() -> Void)?
     var updatesNotification: (([IndexPath], [IndexPath], [IndexPath]) -> Void)?
     var didFinishLoading: (() -> Void)?
