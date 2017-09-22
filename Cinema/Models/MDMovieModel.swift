@@ -14,13 +14,17 @@ struct MDMovieModel: MDModelProtocol {
     let posterPath: String?
     let overview: String?
     let id: Int!
+    let languges: [JSON]?
+    let genres: [JSON]?
     
     init(with json: JSON) {
+        id = json["id"] as! Int
         title = json["original_title"] as? String
         popularity = json["popularity"] as? Double
         posterPath = json["poster_path"] as? String
         overview = json["overview"] as? String
-        id = json["id"] as! Int
+        languges = json["spoken_languages"] as? [JSON]
+        genres = json["genres"] as? [JSON]
     }
     
 }
@@ -40,6 +44,27 @@ extension MDMovieModel {
             return URL(string: MDConstant.imageBaseURL + "/\(size)" + path)
         }
         return nil
+    }
+    
+    func getGenersString() -> String? {
+        return getDescription(json: genres)
+    }
+    
+    func getLanguagesString() -> String? {
+        return getDescription(json: languges)
+    }
+    
+    func getDescription(json: [JSON]?) -> String? {
+        guard let dict = json, dict.count > 0 else { return nil }
+        var result = ""
+        var count = dict.count
+        for genre in dict {
+            count -= 1
+            if let text = genre["name"] as? String {
+                result.append(text + (count == 0 ? "." : ", "))
+            }
+        }
+        return result
     }
     
 }

@@ -117,10 +117,11 @@
 				12865CB01F73F8470058F42A /* MovieDetail */,
 				12C3844C1F7415C4008A1B1C /* Booking */,
 				12865C811F7359660058F42A /* Assets.xcassets */,
-				12865CAB1F73D43C0058F42A /* MDServerService.swift */,
-				12865C831F7359660058F42A /* LaunchScreen.storyboard */,
-				12865C861F7359660058F42A /* Info.plist */,
+				12C8CA1C1F74B16100F97122 /* Models */,
+				12C8CA1B1F74B15300F97122 /* Services */,
 				12865C9C1F7366910058F42A /* Utilities */,
+				12865C861F7359660058F42A /* Info.plist */,
+				12865C831F7359660058F42A /* LaunchScreen.storyboard */,
 			);
 			path = Cinema;
 			sourceTree = "<group>";
@@ -152,7 +153,6 @@
 				12865CA41F737D5C0058F42A /* MDListMovieViewModel.swift */,
 				12865CA61F737D7D0058F42A /* MDListMovieProvider.swift */,
 				12865C9E1F737A2B0058F42A /* MDMoviePreviewCell.swift */,
-				12865CA81F737E220058F42A /* MDMovieModel.swift */,
 			);
 			path = MovieList;
 			sourceTree = "<group>";
@@ -172,6 +172,22 @@
 				12C3844A1F7415B9008A1B1C /* MDBookingViewController.swift */,
 			);
 			path = Booking;
+			sourceTree = "<group>";
+		};
+		12C8CA1B1F74B15300F97122 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				12865CAB1F73D43C0058F42A /* MDServerService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		12C8CA1C1F74B16100F97122 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12865CA81F737E220058F42A /* MDMovieModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		2661041494A318F25638BAF3 /* Frameworks */ = {

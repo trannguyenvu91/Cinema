@@ -13,7 +13,7 @@ fileprivate struct MDListMovieUIConstant {
     let cellInterSpace = 10.0
     let numberOfCellsPerLine: Double = UIDevice.current.userInterfaceIdiom == .pad ? 3 : 2
     let screenWidth = Double(UIScreen.main.bounds.size.width)
-    let loadMoreBottomThresshold: CGFloat = 100.0
+    let loadMoreBottomThresshold: CGFloat = 200.0
     let movieSegueID = "MDMovieViewController"
 }
 
