@@ -38,6 +38,22 @@ class MDListMovieProvider: NSObject, MDListProviderProtocol {
         return movies.count
     }
     
+    func getMovies(at pageIndex: Int, successBlock: @escaping (_ page:Int, _ pagesCount: Int, _ movies: [MDMovieModel]) -> Void) {
+        MDServerService.shareInstance().getMovies(at: pageIndex) { [weak self] (result) in
+            switch result {
+            case .success(let tuple):
+                successBlock(tuple.page, tuple.pagesCount, tuple.movies)
+            case .failure(let error):
+                print(error.debugDescription)
+                self?.didFinishLoading?()
+            }
+        }
+    }
+    
+    var couldLoadMore: Bool {
+        return state != .loading && currentPageIndex < totalPage
+    }
+    
 }
 
 //MARK: server intergration
@@ -76,25 +92,6 @@ extension MDListMovieProvider {
     func finishLoading() {
         state = movies.count > 0 ? .loaded : .empty
         didFinishLoading?()
-    }
-    
-    func getMovies(at pageIndex: Int, successBlock: @escaping (_ page:Int, _ pagesCount: Int, _ movies: [MDMovieModel]) -> Void) {
-        MDServerService.share.getMovies(at: pageIndex) { [weak self] (result) in
-            switch result {
-            case .success(let response):
-                let page = response["page"] as! Int
-                let pagesCount = response["total_pages"] as! Int
-                let movieInfos = response["results"] as! [JSON]
-                successBlock(page, pagesCount, movieInfos.flatMap{MDMovieModel(with: $0)})
-            case .failure(let error):
-                print(error.debugDescription)
-                self?.didFinishLoading?()
-            }
-        }
-    }
-    
-    var couldLoadMore: Bool {
-        return state != .loading && currentPageIndex < totalPage
     }
     
 }

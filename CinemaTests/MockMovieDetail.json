@@ -1,0 +1,68 @@
+{
+    "adult": false,
+    "backdrop_path": "/ftRkFtAGuHngHnLiOxktq0aCVMF.jpg",
+    "belongs_to_collection": {
+        "id": 86066,
+        "name": "Despicable Me Collection",
+        "poster_path": "/xIXhIlZDRmSSfNbpN7kBCm5hg39.jpg",
+        "backdrop_path": "/15IZl405E664QDVxpFJBl7TtLmw.jpg"
+    },
+    "budget": 80000000,
+    "genres": [
+               {
+               "id": 28,
+               "name": "Action"
+               },
+               {
+               "id": 16,
+               "name": "Animation"
+               },
+               {
+               "id": 12,
+               "name": "Adventure"
+               },
+               {
+               "id": 10751,
+               "name": "Family"
+               },
+               {
+               "id": 35,
+               "name": "Comedy"
+               }
+               ],
+    "homepage": "http://www.despicable.me",
+    "id": 324852,
+    "imdb_id": "tt3469046",
+    "original_language": "en",
+    "original_title": "Despicable Me 3",
+    "overview": "Gru and his wife Lucy must stop former '80s child star Balthazar Bratt from achieving world domination.",
+    "popularity": 206.961521,
+    "poster_path": "/5qcUGqWoWhEsoQwNUrtf3y3fcWn.jpg",
+    "production_companies": [
+                             {
+                             "name": "Illumination Entertainment",
+                             "id": 6704
+                             }
+                             ],
+    "production_countries": [
+                             {
+                             "iso_3166_1": "US",
+                             "name": "United States of America"
+                             }
+                             ],
+    "release_date": "2017-06-15",
+    "revenue": 1008265464,
+    "runtime": 96,
+    "spoken_languages": [
+                         {
+                         "iso_639_1": "en",
+                         "name": "English"
+                         }
+                         ],
+    "status": "Released",
+    "tagline": "Oh brother.",
+    "title": "Despicable Me 3",
+    "video": false,
+    "vote_average": 6.2,
+    "vote_count": 1817
+}

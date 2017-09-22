@@ -13,23 +13,24 @@ struct MDMovieModel: MDModelProtocol {
     let popularity: Double?
     let posterPath: String?
     let overview: String?
-    let id: Int!
+    let id: Int?
     let languges: [JSON]?
     let genres: [JSON]?
     
-    init(with json: JSON) {
-        id = json["id"] as! Int
-        title = json["original_title"] as? String
-        popularity = json["popularity"] as? Double
-        posterPath = json["poster_path"] as? String
-        overview = json["overview"] as? String
-        languges = json["spoken_languages"] as? [JSON]
-        genres = json["genres"] as? [JSON]
-    }
     
 }
 
 extension MDMovieModel {
+    
+    init(with json: JSON?) {
+        id = json?["id"] as? Int
+        title = json?["original_title"] as? String
+        popularity = json?["popularity"] as? Double
+        posterPath = json?["poster_path"] as? String
+        overview = json?["overview"] as? String
+        languges = json?["spoken_languages"] as? [JSON]
+        genres = json?["genres"] as? [JSON]
+    }
     
     func getPosterPreviewURL() -> URL? {
         return getPosterURL(size: "w500")

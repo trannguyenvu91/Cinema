@@ -22,43 +22,77 @@ enum MDFailureReason: Int, Error {
 }
 
 class MDServerService: NSObject {
-    static let share = MDServerService()
+    private static let share = MDServerService()
+    
+    class func shareInstance() -> MDServerService {
+        return MDServerService.share
+    }
     
     // MARK: - GetMovies
-    func getMovies(at pageIndex: Int, completion: @escaping MDRequestCompletion) {
+    typealias MDGetMoviesTuple = (page:Int, pagesCount: Int, movies: [MDMovieModel])
+    typealias MDGetMoviesResult = Result<MDGetMoviesTuple, MDFailureReason>
+    typealias MDGetMoviesCompletion = (MDGetMoviesResult) -> Void
+    
+    func getMovies(at pageIndex: Int, completion: @escaping MDGetMoviesCompletion) {
         let moviesPath = "\(MDConstant.serverBaseURL)/discover/movie?api_key=\(MDConstant.serverAPIKey)&sort_by=release_date.desc&page=\(pageIndex)"
-        return requestAPI(path: moviesPath, completion: completion)
+        return requestAPI(path: moviesPath, requestCompletion: { (requestResult) in
+            switch requestResult {
+            case .success(let json):
+                let page = json["page"] as! Int
+                let pagesCount = json["total_pages"] as! Int
+                let movieInfos = json["results"] as! [JSON]
+                let movies = movieInfos.flatMap{MDMovieModel(with: $0)}
+                let tuple = MDGetMoviesTuple(page, pagesCount, movies)
+                completion(MDServerService.MDGetMoviesResult.success(payload: tuple))
+            case .failure(let error):
+                completion(MDServerService.MDGetMoviesResult.failure(error))
+            }
+        })
     }
     
     //MARK: Movie detail
-    func getMovieDetail(at movieID: Int, completion: @escaping MDRequestCompletion) {
+    typealias MDDetailResult = Result<MDMovieModel, MDFailureReason>
+    typealias MDDetailCompletion = (MDDetailResult) -> Void
+    
+    func getMovieDetail(at movieID: Int, completion: @escaping MDDetailCompletion) {
         let detailPath = "\(MDConstant.serverBaseURL)/movie/\(movieID)?api_key=\(MDConstant.serverAPIKey)"
-        return requestAPI(path: detailPath, completion: completion)
+        
+        return requestAPI(path: detailPath, requestCompletion: { (requestResult) in
+            switch requestResult {
+            case .success(let json):
+                let movie = MDMovieModel(with: json)
+                completion(MDServerService.MDDetailResult.success(payload: movie))
+            case .failure(let error):
+                completion(MDServerService.MDDetailResult.failure(error))
+            }
+        })
     }
     
     //MARK: Generic request
     typealias MDResponseResult = Result<JSON, MDFailureReason>
     typealias MDRequestCompletion = (MDResponseResult) -> Void
-    func requestAPI(path: String, completion: @escaping MDRequestCompletion) {
+    
+    func requestAPI(path: String, requestCompletion: @escaping MDRequestCompletion) {
         Alamofire.request(path)
             .validate()
             .responseJSON { response in
                 switch response.result {
                 case .success:
                     guard let pageInfo = response.result.value as? JSON else {
-                        completion(.failure(nil))
+                        requestCompletion(.failure(nil))
                         return
                     }
-                    completion(.success(payload: pageInfo))
+                    requestCompletion(.success(payload: pageInfo))
                 case .failure(let error):
                     print(error.localizedDescription)
                     if let statusCode = response.response?.statusCode,
                         let reason = MDFailureReason(rawValue: statusCode) {
-                        completion(.failure(reason))
+                        requestCompletion(.failure(reason))
                     }
-                    completion(.failure(nil))
+                    requestCompletion(.failure(nil))
                 }
         }
     }
     
 }
+

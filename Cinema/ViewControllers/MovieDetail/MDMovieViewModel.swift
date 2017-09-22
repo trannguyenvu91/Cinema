@@ -10,22 +10,23 @@ import UIKit
 
 class MDMovieViewModel: NSObject {
     var movie: MDMovieModel?
-    var updateCompletion: () -> Void
+    var updateCompletion: (() -> Void)?
+    var services: MDServerService {
+        return MDServerService.shareInstance()
+    }
     
-    init(movie: MDMovieModel?, updateCompletion: @escaping () -> Void) {
+    
+    init(movie: MDMovieModel?, updateCompletion: (() -> Void)?) {
         self.movie = movie
         self.updateCompletion = updateCompletion
     }
     
     func getMovieInfo() {
-        guard let movieID = movie?.id else {
-            return;
-        }
-        MDServerService.share.getMovieDetail(at: movieID) { [weak self] (result) in
+        services.getMovieDetail(at: movie?.id ?? 0) { [weak self] (result) in
             switch result {
-            case .success(let response):
-                self?.movie = MDMovieModel(with: response)
-                self?.updateCompletion()
+            case .success(let movie):
+                self?.movie = movie
+                self?.updateCompletion?()
             case .failure(let error):
                 print(error.debugDescription)
             }
