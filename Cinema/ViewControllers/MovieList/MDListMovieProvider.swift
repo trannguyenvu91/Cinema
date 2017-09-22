@@ -39,7 +39,7 @@ class MDListMovieProvider: NSObject, MDListProviderProtocol {
     }
     
     func getMovies(at pageIndex: Int, successBlock: @escaping (_ page:Int, _ pagesCount: Int, _ movies: [MDMovieModel]) -> Void) {
-        MDServerService.shareInstance().getMovies(at: pageIndex) { [weak self] (result) in
+        services.getMovies(at: pageIndex) { [weak self] (result) in
             switch result {
             case .success(let tuple):
                 successBlock(tuple.page, tuple.pagesCount, tuple.movies)
@@ -52,6 +52,10 @@ class MDListMovieProvider: NSObject, MDListProviderProtocol {
     
     var couldLoadMore: Bool {
         return state != .loading && currentPageIndex < totalPage
+    }
+    
+    var services: MDServerService {
+        return MDServerService.shareInstance()
     }
     
 }

@@ -11,25 +11,27 @@ import XCTest
 
 class MDListMovieProviderTest: XCTestCase {
     private let mockProvider = MockListMovieProvider()
+    private let services = MockServerService.mock
     
     override func setUp() {
         super.setUp()
     }
     
     func testRefresh() {
+        services.mockGetMoviesListSuccess()
         mockProvider.refresh()
-        XCTAssert(mockProvider.numberOfItems(in: 0) == mockProvider.getMoreCount, "Data after refresh should be equal")
+        XCTAssert(mockProvider.numberOfItems(in: 0) > 0, "Data after refresh should have items")
     }
     
     func testLoadMore() {
-        mockProvider.shouldLoadMore = true
+        services.mockGetMoviesListSuccess()
         let existMovieCount = mockProvider.numberOfItems(in: 0)
         mockProvider.loadMore()
-        XCTAssert(mockProvider.numberOfItems(in: 0) == existMovieCount + mockProvider.getMoreCount, "Data after refresh should be added")
+        XCTAssert(mockProvider.numberOfItems(in: 0) > existMovieCount, "Data after refresh should be added")
     }
     
     func testCantLoadMore() {
-        mockProvider.shouldLoadMore = false
+        services.mockRequestFail()
         let existMovieCount = mockProvider.numberOfItems(in: 0)
         mockProvider.loadMore()
         XCTAssert(mockProvider.numberOfItems(in: 0) == existMovieCount, "Data after refresh should not load more")
@@ -49,12 +51,10 @@ class MDListMovieProviderTest: XCTestCase {
 }
 
 private final class MockListMovieProvider: MDListMovieProvider {
-    let getMoreCount = 2
     var shouldLoadMore = true
     
-    override func getMovies(at pageIndex: Int, successBlock: @escaping (Int, Int, [MDMovieModel]) -> Void) {
-        let moreMovies = [MDMovieModel](repeating: MDMovieModel(with: nil), count: getMoreCount)
-        successBlock(pageIndex + 1, Int.max, moreMovies)
+    override var services: MockServerService {
+        return MockServerService.mock
     }
     
     override var couldLoadMore: Bool {

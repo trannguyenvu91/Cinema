@@ -15,7 +15,6 @@ class MDMovieViewModel: NSObject {
         return MDServerService.shareInstance()
     }
     
-    
     init(movie: MDMovieModel?, updateCompletion: (() -> Void)?) {
         self.movie = movie
         self.updateCompletion = updateCompletion

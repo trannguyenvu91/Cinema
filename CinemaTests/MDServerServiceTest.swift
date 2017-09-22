@@ -10,9 +10,7 @@ import XCTest
 @testable import Cinema
 
 class MDServerServiceTest: XCTestCase {
-    private let services = MockServerService()
-    let mockDetailJSONPath = "MockMovieDetail"
-    let mockListJSONPath = "MockMoviesList"
+    private let services = MockServerService.mock
     
     override func setUp() {
         super.setUp()
@@ -23,11 +21,11 @@ class MDServerServiceTest: XCTestCase {
     }
     
     func testGetMoviesListFail() {
-        services.result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
+        services.mockRequestFail()
         services.getMovies(at: 1) { (result) in
             switch result {
             case Result.success(payload: _):
-                XCTAssert(false, "Should fail")
+                XCTAssert(false, "this request should return fail")
             default:
                 break
             }
@@ -35,10 +33,7 @@ class MDServerServiceTest: XCTestCase {
     }
     
     func testGetMoviesListSuccess() {
-        guard let json = services.getJSON(path: mockListJSONPath)  else {
-            return
-        }
-        services.result = MDServerService.MDResponseResult.success(payload: json)
+        services.mockGetMoviesListSuccess()
         services.getMovies(at: 1) { (result) in
             switch result {
             case Result.success(let tuple):
@@ -46,7 +41,7 @@ class MDServerServiceTest: XCTestCase {
                 XCTAssert(tuple.page > 0, "Should fail")
                 XCTAssert(tuple.pagesCount > 0, "Should fail")
             default:
-                XCTAssert(false, "Should fail")
+                XCTAssert(false, "this request should return success")
                 break
             }
         }
@@ -54,11 +49,11 @@ class MDServerServiceTest: XCTestCase {
     
     
     func testGetMoviesDetailFail() {
-        services.result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
+        services.mockRequestFail()
         services.getMovieDetail(at: 1){ (result) in
             switch result {
             case Result.success(payload: _):
-                XCTAssert(false, "Should fail")
+                XCTAssert(false, "this request should return fail")
             default:
                 break
             }
@@ -66,16 +61,13 @@ class MDServerServiceTest: XCTestCase {
     }
     
     func testGetMoviesDetailSuccess() {
-        guard let json = services.getJSON(path: mockDetailJSONPath)  else {
-            return
-        }
-        services.result = MDServerService.MDResponseResult.success(payload: json)
+        services.mockGetDetaiSuccess()
         services.getMovieDetail(at: 1){ (result) in
             switch result {
             case Result.success(let movie):
                 XCTAssert(movie.id != nil, "Movie should not be nil")
             default:
-                XCTAssert(false, "Should fail")
+                XCTAssert(false, "this request should return success")
                 break
             }
         }
@@ -84,12 +76,11 @@ class MDServerServiceTest: XCTestCase {
 }
 
 //MARK: MockServerService
-private final class MockServerService: MDServerService {
+final class MockServerService: MDServerService {
+    let mockDetailJSONPath = "MockMovieDetail"
+    let mockListJSONPath = "MockMoviesList"
     var result: MDServerService.MDResponseResult!
-    
-    override func requestAPI(path: String, requestCompletion: @escaping MDServerService.MDRequestCompletion) {
-        requestCompletion(result)
-    }
+    static let mock = MockServerService()
     
     func getJSON(path: String) -> JSON? {
         let bundle = Bundle(for: self.classForCoder)
@@ -101,5 +92,27 @@ private final class MockServerService: MDServerService {
         return json
     }
     
+    func mockRequestFail() {
+        result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
+    }
+    
+    func mockGetMoviesListSuccess() {
+        guard let json = getJSON(path: mockListJSONPath)  else {
+            return
+        }
+        result = MDServerService.MDResponseResult.success(payload: json)
+    }
+    
+    
+    func mockGetDetaiSuccess() {
+        guard let json = getJSON(path: mockDetailJSONPath)  else {
+            return
+        }
+        result = MDServerService.MDResponseResult.success(payload: json)
+    }
+    
+    override func requestAPI(path: String, requestCompletion: @escaping MDServerService.MDRequestCompletion) {
+        requestCompletion(result)
+    }
     
 }

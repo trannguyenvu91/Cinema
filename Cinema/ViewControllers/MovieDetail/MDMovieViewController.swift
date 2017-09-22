@@ -17,6 +17,7 @@ class MDMovieViewController: UIViewController {
     @IBOutlet weak var labelPopularity: UILabel!
     @IBOutlet weak var labelLanguages: UILabel!
     @IBOutlet weak var labelGenres: UILabel!
+    @IBOutlet weak var labelDuration: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +31,18 @@ class MDMovieViewController: UIViewController {
         labelTitle.text = movie?.title
         imageView.sd_setImage(with: movie?.getPosterThumbURL(), completed: nil)
         labelOverview.text = movie?.overview
-        labelPopularity.text = "\(movie?.popularity ?? 0)"
         labelGenres.text = movie?.getGenersString() ?? "--"
         labelLanguages.text = movie?.getLanguagesString() ?? "--"
+        if let duration = movie?.duration {
+            labelDuration.text = "\(duration) mins"
+        }
+        if let popularity = movie?.popularity {
+            labelPopularity.text = "\(popularity)"
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 }

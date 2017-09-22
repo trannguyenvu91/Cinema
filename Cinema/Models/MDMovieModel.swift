@@ -16,8 +16,7 @@ struct MDMovieModel: MDModelProtocol {
     let id: Int?
     let languges: [JSON]?
     let genres: [JSON]?
-    
-    
+    let duration: Int?
 }
 
 extension MDMovieModel {
@@ -30,6 +29,7 @@ extension MDMovieModel {
         overview = json?["overview"] as? String
         languges = json?["spoken_languages"] as? [JSON]
         genres = json?["genres"] as? [JSON]
+        duration = json?["runtime"] as? Int
     }
     
     func getPosterPreviewURL() -> URL? {

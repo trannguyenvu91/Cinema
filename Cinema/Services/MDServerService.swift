@@ -73,9 +73,11 @@ class MDServerService: NSObject {
     typealias MDRequestCompletion = (MDResponseResult) -> Void
     
     func requestAPI(path: String, requestCompletion: @escaping MDRequestCompletion) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         Alamofire.request(path)
             .validate()
             .responseJSON { response in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 switch response.result {
                 case .success:
                     guard let pageInfo = response.result.value as? JSON else {
@@ -95,4 +97,3 @@ class MDServerService: NSObject {
     }
     
 }
-

@@ -9,7 +9,6 @@
 import UIKit
 
 class MDBookingViewController: UIViewController {
-
     @IBOutlet weak var webView: UIWebView!
     let bookingURL = URL(string: "http://www.cathaycineplexes.com.sg")
     
@@ -21,4 +20,5 @@ class MDBookingViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
 }
