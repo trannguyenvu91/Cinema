@@ -37,9 +37,9 @@ class MDServerServiceTest: XCTestCase {
         services.getMovies(at: 1) { (result) in
             switch result {
             case Result.success(let tuple):
-                XCTAssert(tuple.movies.count > 0, "Should fail")
-                XCTAssert(tuple.page > 0, "Should fail")
-                XCTAssert(tuple.pagesCount > 0, "Should fail")
+                XCTAssert(tuple.movies.count > 0, "Should have movies")
+                XCTAssert(tuple.page > 0, "Should have positive page index")
+                XCTAssert(tuple.pagesCount > 0, "Should have more pages")
             default:
                 XCTAssert(false, "this request should return success")
                 break
