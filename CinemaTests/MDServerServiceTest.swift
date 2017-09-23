@@ -47,7 +47,6 @@ class MDServerServiceTest: XCTestCase {
         }
     }
     
-    
     func testGetMoviesDetailFail() {
         services.mockRequestFail()
         services.getMovieDetail(at: 1){ (result) in
@@ -92,27 +91,27 @@ final class MockServerService: MDServerService {
         return json
     }
     
-    func mockRequestFail() {
-        result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
-    }
-    
     func mockGetMoviesListSuccess() {
-        guard let json = getJSON(path: mockListJSONPath)  else {
-            return
-        }
-        result = MDServerService.MDResponseResult.success(payload: json)
+        mockRequestSuccess(jsonPath: mockListJSONPath)
     }
-    
-    
+
     func mockGetDetaiSuccess() {
-        guard let json = getJSON(path: mockDetailJSONPath)  else {
-            return
-        }
-        result = MDServerService.MDResponseResult.success(payload: json)
+        mockRequestSuccess(jsonPath: mockDetailJSONPath)
     }
     
     override func requestAPI(path: String, requestCompletion: @escaping MDServerService.MDRequestCompletion) {
         requestCompletion(result)
+    }
+    
+    func mockRequestFail() {
+        result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
+    }
+    
+    private func mockRequestSuccess(jsonPath: String) {
+        guard let json = getJSON(path: jsonPath)  else {
+            return
+        }
+        result = MDServerService.MDResponseResult.success(payload: json)
     }
     
 }
