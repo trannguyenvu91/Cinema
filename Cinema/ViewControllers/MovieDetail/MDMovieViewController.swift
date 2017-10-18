@@ -21,7 +21,9 @@ class MDMovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MDMovieViewModel(movie: movie, updateCompletion: updateUI)
+        viewModel = MDMovieViewModel(movie: movie, updateCompletion: { [weak self] in
+            self?.updateUI()
+        })
         updateUI()
         viewModel.getMovieInfo()
     }
