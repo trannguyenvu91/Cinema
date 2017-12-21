@@ -78,8 +78,8 @@ class MDServerServiceTest: XCTestCase {
 final class MockServerService: MDServerService {
     let mockDetailJSONPath = "MockMovieDetail"
     let mockListJSONPath = "MockMoviesList"
-    var result: MDServerService.MDResponseResult!
     static let mock = MockServerService()
+    var mockResponse: JSON?
     
     func getJSON(path: String) -> JSON? {
         let bundle = Bundle(for: self.classForCoder)
@@ -99,19 +99,24 @@ final class MockServerService: MDServerService {
         mockRequestSuccess(jsonPath: mockDetailJSONPath)
     }
     
-    override func requestAPI(path: String, requestCompletion: @escaping MDServerService.MDRequestCompletion) {
-        requestCompletion(result)
+    override func requestAPI(resource: MDResource, requestCompletion: @escaping MDServerService.MDRequestCompletion) {
+        guard let json = mockResponse else {
+            requestCompletion(MDServerService.MDResponseResult.failure(nil))
+            return
+        }
+        let result = resource.parseResponse(json)
+        requestCompletion(MDServerService.MDResponseResult.success(payload: result))
     }
     
     func mockRequestFail() {
-        result = MDServerService.MDResponseResult.failure(MDFailureReason.notFound)
+        mockResponse = nil
     }
     
     private func mockRequestSuccess(jsonPath: String) {
         guard let json = getJSON(path: jsonPath)  else {
             return
         }
-        result = MDServerService.MDResponseResult.success(payload: json)
+        mockResponse = json
     }
     
 }

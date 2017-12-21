@@ -21,6 +21,12 @@ enum MDFailureReason: Int, Error {
     case notFound = 404
 }
 
+struct MDResource<T> {
+    let urlPath: String!
+    let parseResponse:(JSON) -> T
+    
+}
+
 class MDServerService: NSObject {
     private static let share = MDServerService()
     
@@ -35,17 +41,21 @@ class MDServerService: NSObject {
     
     func getMovies(at pageIndex: Int, completion: @escaping MDGetMoviesCompletion) {
         let moviesPath = "\(MDConstant.serverBaseURL)/discover/movie?api_key=\(MDConstant.serverAPIKey)&sort_by=release_date.desc&page=\(pageIndex)"
-        return requestAPI(path: moviesPath, requestCompletion: { (requestResult) in
+        let resource = MDResource(urlPath: moviesPath) { (response) -> Any in
+            let page = response["page"] as! Int
+            let pagesCount = response["total_pages"] as! Int
+            let movieInfos = response["results"] as! [JSON]
+            let movies = movieInfos.flatMap{MDMovieModel(with: $0)}
+            let tuple = MDGetMoviesTuple(page, pagesCount, movies)
+            return tuple
+        }
+        
+        return requestAPI(resource: resource, requestCompletion: { (requestResult) in
             switch requestResult {
-            case .success(let json):
-                let page = json["page"] as! Int
-                let pagesCount = json["total_pages"] as! Int
-                let movieInfos = json["results"] as! [JSON]
-                let movies = movieInfos.flatMap{MDMovieModel(with: $0)}
-                let tuple = MDGetMoviesTuple(page, pagesCount, movies)
-                completion(MDServerService.MDGetMoviesResult.success(payload: tuple))
+            case .success(let tuple):
+                completion(.success(payload: tuple as! MDServerService.MDGetMoviesTuple))
             case .failure(let error):
-                completion(MDServerService.MDGetMoviesResult.failure(error))
+                completion(.failure(error))
             }
         })
     }
@@ -56,35 +66,38 @@ class MDServerService: NSObject {
     
     func getMovieDetail(at movieID: Int, completion: @escaping MDDetailCompletion) {
         let detailPath = "\(MDConstant.serverBaseURL)/movie/\(movieID)?api_key=\(MDConstant.serverAPIKey)"
+        let resource = MDResource(urlPath: detailPath) { (response) -> Any in
+            return MDMovieModel(with: response)
+        }
         
-        return requestAPI(path: detailPath, requestCompletion: { (requestResult) in
+        return requestAPI(resource: resource, requestCompletion: { (requestResult) in
             switch requestResult {
-            case .success(let json):
-                let movie = MDMovieModel(with: json)
-                completion(MDServerService.MDDetailResult.success(payload: movie))
+            case .success(let movie):
+                completion(.success(payload: movie as! MDMovieModel))
             case .failure(let error):
-                completion(MDServerService.MDDetailResult.failure(error))
+                completion(.failure(error))
             }
         })
     }
     
     //MARK: Generic request
-    typealias MDResponseResult = Result<JSON, MDFailureReason>
+    typealias MDResponseResult = Result<Any, MDFailureReason>
     typealias MDRequestCompletion = (MDResponseResult) -> Void
     
-    func requestAPI(path: String, requestCompletion: @escaping MDRequestCompletion) {
+    func requestAPI(resource: MDResource<Any>, requestCompletion: @escaping MDRequestCompletion) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        Alamofire.request(path)
+        Alamofire.request(resource.urlPath)
             .validate()
             .responseJSON { response in
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 switch response.result {
                 case .success:
-                    guard let pageInfo = response.result.value as? JSON else {
+                    guard let dataDict = response.result.value as? JSON else {
                         requestCompletion(.failure(nil))
                         return
                     }
-                    requestCompletion(.success(payload: pageInfo))
+                    let result = resource.parseResponse(dataDict)
+                    requestCompletion(.success(payload: result))
                 case .failure(let error):
                     print(error.localizedDescription)
                     if let statusCode = response.response?.statusCode,
